@@ -19,7 +19,23 @@ router.post("/", async (req, res) => {
     if (!user) return res.status(404).json({ error: "User not found" });
     if (!category) return res.status(404).json({ error: "Category not found" });
 
-    const expense = expenseRepo.create({ user, category, description, amount, date, taxYear });
+    if (
+      category.professionType &&
+      category.professionType !== user.professionType
+    ) {
+      return res
+        .status(400)
+        .json({ error: "Category not valid for this profession type" });
+    }
+
+    const expense = expenseRepo.create({
+      user,
+      category,
+      description,
+      amount,
+      date,
+      taxYear,
+    });
     await expenseRepo.save(expense);
     res.status(201).json(expense);
   } catch (err) {
@@ -27,7 +43,6 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Listar gastos
 router.get("/", async (_req, res) => {
   const expenses = await expenseRepo.find({ relations: ["user", "category"] });
   res.json(expenses);

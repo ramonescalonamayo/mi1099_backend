@@ -4,6 +4,7 @@ import userRoutes from "./routes/userRoutes";
 import incomeRoutes from "./routes/incomeRoutes";
 import expenseRoutes from "./routes/expenseRoutes";
 import reportRoutes from "./routes/reportRoutes";
+import categoryRoutes from "./routes/categoryRoutes";
 
 const app = express();
 app.use(express.json());
@@ -15,6 +16,7 @@ AppDataSource.initialize()
     app.use("/users", userRoutes);
     app.use("/incomes", incomeRoutes);
     app.use("/expenses", expenseRoutes);
+    app.use("/categories", categoryRoutes);
     app.use("/reports", reportRoutes);
 
     app.get("/", (req, res) => {
